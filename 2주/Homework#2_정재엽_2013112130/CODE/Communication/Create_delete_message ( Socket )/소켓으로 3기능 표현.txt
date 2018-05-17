@@ -1,0 +1,6 @@
+socket 
+bind
+listen
+connect
+accept
+send
