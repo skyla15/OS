@@ -1,0 +1,46 @@
+LOC 	LABEL     OPERATOR  OPERAND   	OBJECT CODE
+0014	COPY      START     100A      
+100a	FIRST     STL       RETADR    	14103d
+100d	CLOOP     JSUB      RDREC     	482043
+1010	          LDA       LENGTH    	001040
+1013	          COMP      ZERO      	28103a
+1016	          JEQ       ENDFIL    	30101f
+1019	          JSUB      WRREC     	48206b
+101c	          J         CLOOP     	3c100d
+101f	ENDFIL    LDA       EOF       	001034
+1022	          STA       BUFFER    	0c1043
+1025	          LDA       THREE     	001037
+1028	          STA       LENGTH    	0c1040
+102b	          JSUB      WRREC     	48206b
+102e	          LDL       RETADR    	08103d
+1031	          RSUB                	4c0000
+1034	EOF       BYTE      C'EOF'    	454f46
+1037	THREE     WORD      3         	000003
+103a	ZERO      WORD      0         	000000
+103d	RETADR    RESW      1         
+1040	LENGTH    RESW      1         
+1043	BUFFER    RESB      4096      
+2043	RDREC     LDX       ZERO      	04103a
+2046	          LDA       ZERO      	00103a
+2049	RLOOP     TD        INPUT     	e02067
+204c	          JEQ       RLOOP     	302049
+204f	          RD        INPUT     	d82067
+2052	          COMP      ZERO      	28103a
+2055	          JEQ       EXIT      	302061
+2058	          STCH      BUFFER,X  	549043
+205b	          TIX       MAXLEN    	2c2068
+205e	          JLT       RLOOP     	382049
+2061	EXIT      STX       LENGTH    	101040
+2064	          RSUB                	4c0000
+2067	INPUT     BYTE      X'F1'     	0000f1
+2068	MAXLEN    WORD      4096      	001000
+206b	WRREC     LDX       ZERO      	04103a
+206e	WLOOP     TD        OUTPUT    	e02083
+2071	          JEQ       WLOOP     	30206e
+2074	          LDCH      BUFFER,X  	509043
+2077	          WD        OUTPUT    	dc2083
+207a	          TIX       LENGTH    	2c1040
+207d	          JLT       WLOOP     	38206e
+2080	          RSUB                	4c0000
+2083	OUTPUT    BYTE      X'O5'     	000005
+2084	          END       FIRST     
